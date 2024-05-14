@@ -25,15 +25,30 @@ def formulario_criar_cliente():
 
 @cliente_route.route('/<int:ClienteID>')
 def detalhe_cliente(ClienteID):
-    return render_template('detalhe_cliente.html')
+    cliente = list(filter(lambda c: c['id'] == ClienteID, CLIENTES))[0]
+    return render_template('detalhe_cliente.html', cliente=cliente)
  
 @cliente_route.route('/<int:ClienteID>/edit')
 def formulario_editar_cliente(ClienteID):
-    return render_template('fomr_e_cliente.html')
+    cliente = None
+    for c in CLIENTES:
+        if c['id'] == ClienteID:
+            cliente = c
+    return render_template('form_c_cliente.html', cliente=cliente)
           
 @cliente_route.route('/<int:ClienteID>/update', methods=['PUT'])
-def atualizar_cliente():
-    return "Atualizar os dados de um cliente" 
+def atualizar_cliente(ClienteID):
+    cliente_editado = None
+    # Obter dados do formulário
+    data = request.json
+    # Obter ID do cliente
+    for c in CLIENTES:
+        if c['id'] == ClienteID:
+            c['nome'] = data['nome']
+            c['email'] = data['email']
+            cliente_editado = c
+    return render_template('item_cliente.html', cliente=cliente_editado)
+ 
 
 @cliente_route.route('/<int:ClienteID>/delete', methods=['DELETE'])
 def deletar_cliente(ClienteID):

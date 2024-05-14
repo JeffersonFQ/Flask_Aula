@@ -1,16 +1,30 @@
-<form class="c-form" action="{{ url_for('cliente.criar_cliente') }}" method="POST" c-append="#novo-cliente">
+<form 
+  class="c-form"
+  {% if cliente %}
+    action="{{ url_for('cliente.atualizar_cliente', ClienteID=cliente.id) }}"
+  {% else %}
+    action="{{ url_for('cliente.criar_cliente') }}"
+  {% endif %}  
+  method="{% if cliente %}PUT{% else %}POST{% endif %}"
+  {% if cliente %}
+    c-swap="#cliente-{{cliente.id}}"
+  {% else %}
+    c-append="#novo-cliente"
+  {% endif %}>
 
     <div class="mb-3">
       <label class="form-label">Nome</label>
-      <input type="text" class="form-control" name="nome">
+      <input type="text" class="form-control" name="nome" {% if cliente %} value="{{cliente.nome}}" {% endif %}>
     </div>
 
     <div class="mb-3">
       <label class="form-label">Email</label>
-      <input type="email" class="form-control" name="email">
+      <input type="email" class="form-control" name="email"{% if cliente %} value="{{cliente.email}}" {% endif %}>
     </div>
 
 
-    <button type="submit" class="btn btn-primary">Cadastrar</button>
+    <button type="submit" class="btn btn-primary">
+      {% if cliente %} Salvar {% else %} Cadastrar {% endif %}
+    </button>
 
 </form>

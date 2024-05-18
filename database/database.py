@@ -1,7 +1,9 @@
 import os
-from peewee import MySQLDatabase
+from peewee import MySQLDatabase, SqliteDatabase
 from dotenv import load_dotenv
 
 load_dotenv()
 
-db = MySQLDatabase(os.getenv('DATABASE_URL'))
+
+db = SqliteDatabase('Clientes.db')
+# db = MySQLDatabase(os.getenv('DATABASE_URL'))
